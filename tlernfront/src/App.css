@@ -1,0 +1,423 @@
+/* ----------------------------------------------------
+   БАЗОВЫЕ СТИЛИ
+---------------------------------------------------- */
+.app {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    background: #f5f7fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    color: #111111;
+    box-sizing: border-box;
+    overflow: auto;
+    /* регулируйте размер иконок */
+    --icon-size: 22px;
+    /* мягкая анимация смены темы */
+    transition: background 0.35s ease, color 0.35s ease;
+}
+
+.container {
+    width: 900px;
+    max-width: 95%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+/* ----------------------------------------------------
+   КАТЕГОРИЯ
+---------------------------------------------------- */
+.category {
+    background: #ffdf39;
+    border-radius: 10px;
+    padding: 12px 20px;
+    width: fit-content;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #111111;
+}
+
+/* ----------------------------------------------------
+   КНОПКИ ВВЕРХУ
+---------------------------------------------------- */
+.top-buttons {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 6px;
+    background: #ffffff;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.1s ease;
+}
+
+    .icon-btn:active {
+        transform: scale(0.92);
+    }
+
+.icon-img {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    object-fit: contain;
+    display: block;
+}
+
+/* ----------------------------------------------------
+   ОСНОВНАЯ КАРТОЧКА
+---------------------------------------------------- */
+.card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 100%;
+    max-width: 100%;
+    /* анимация при смене темы */
+    transition: background 0.35s ease, color 0.35s ease, box-shadow 0.35s ease, transform 0.3s ease, opacity 0.3s ease;
+    /* оптимизация анимации */
+    will-change: transform, opacity;
+    /* 3D Flip базовые параметры (оставлено для совместимости)   */
+    transform-style: preserve-3d;
+}
+
+/* ----------------------------------------------------
+   FLIP АНИМАЦИЯ
+---------------------------------------------------- */
+.flip-none {
+    transform: rotateY(0deg);
+}
+
+.flip-start {
+    transform: rotateY(90deg);
+    transition: transform 0.3s ease;
+}
+
+.flip-end {
+    transform: rotateY(0deg);
+    transition: transform 0.3s ease;
+}
+
+/* ----------------------------------------------------
+   КОНТЕНТ КАРТОЧКИ
+---------------------------------------------------- */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.word {
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.transcr {
+    color: #666666;
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+.pos {
+    color: #777777;
+    margin-top: 5px;
+    font-size: 18px;
+}
+
+.new-word-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #1a73e8;
+}
+
+.new-word-label {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #1a73e8;
+}
+
+/* ----------------------------------------------------
+   show / answer
+---------------------------------------------------- */
+.show-area {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.show-btn {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 10px 30px;
+    cursor: pointer;
+    border: 2px solid #eeeeee;
+    font-size: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: box-shadow 0.15s ease, transform 0.1s ease;
+    color: #111111;
+}
+
+    .show-btn:hover {
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    }
+
+    .show-btn:active {
+        transform: scale(0.94);
+    }
+
+.answer {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 12px;
+    background: #f2f4ff;
+    font-size: 20px;
+    color: #333333;
+    transition: background 0.35s ease, color 0.35s ease;
+}
+
+.pagination {
+    margin-top: 20px;
+    color: #444444;
+    font-size: 18px;
+    text-align: center;
+}
+
+/* ----------------------------------------------------
+   КНОПКИ СНИЗУ
+---------------------------------------------------- */
+.bottom-buttons {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.yes-btn,
+.no-btn {
+    flex: 1 1 45%;
+    padding: 20px;
+    border-radius: 15px;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.yes-btn {
+    background: #ffd600;
+    color: #111111;
+}
+
+.no-btn {
+    background: #000000;
+    color: #ffffff;
+}
+
+    .yes-btn:hover,
+    .no-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .yes-btn:active,
+    .no-btn:active {
+        transform: scale(0.95);
+    }
+
+/* ----------------------------------------------------
+   ВЫПАДАЮЩЕЕ МЕНЮ (настройки)
+---------------------------------------------------- */
+.dropdown-settings {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 12px 16px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    z-index: 1000;
+    width: 200px;
+    transition: background 0.35s ease, color 0.35s ease;
+}
+
+.dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 16px;
+    color: #111;
+}
+
+/* ----------------------------------------------------
+   ВЫПАДАЮЩЕЕ МЕНЮ (статистика)
+---------------------------------------------------- */
+.dropdown-stats {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 12px 16px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    z-index: 1000;
+    width: 160px;
+    font-size: 16px;
+    color: #111;
+    transition: background 0.35s ease, color 0.35s ease;
+}
+
+/* ----------------------------------------------------
+   SWITCH (тёмная тема)
+---------------------------------------------------- */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 22px;
+}
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 34px;
+    transition: 0.3s;
+}
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 3px;
+        bottom: 3px;
+        background: white;
+        border-radius: 50%;
+        transition: 0.3s;
+    }
+
+input:checked + .slider {
+    background-color: #3b82f6;
+}
+
+    input:checked + .slider:before {
+        transform: translateX(22px);
+    }
+
+/* ----------------------------------------------------
+   ТЕМНАЯ ТЕМА
+---------------------------------------------------- */
+.app.dark {
+    background: #0f172a;
+    color: #f1f5f9;
+}
+
+    .app.dark .card {
+        background: #1e293b;
+        color: #f8fafc;
+    }
+
+    .app.dark .category {
+        background: #facc15;
+        color: #111111;
+    }
+
+    .app.dark .dropdown-settings,
+    .app.dark .dropdown-stats {
+        background: #1f2937;
+        color: #f8fafc;
+    }
+
+    .app.dark .show-btn {
+        background: #1e293b;
+        border-color: #334155;
+        color: #f8fafc;
+    }
+
+    .app.dark .answer {
+        background: #334155;
+        color: #f1f5f9;
+    }
+
+    .app.dark .yes-btn {
+        background: #eab308;
+        color: #111;
+    }
+
+    .app.dark .no-btn {
+        background: #111827;
+        color: #fff;
+    }
+
+/* ----------------------------------------------------
+   АДАПТИВ
+---------------------------------------------------- */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px 16px;
+    }
+
+    .card {
+        padding: 25px;
+    }
+
+    .word {
+        font-size: 36px;
+    }
+
+    .yes-btn,
+    .no-btn {
+        font-size: 16px;
+        padding: 15px;
+        flex-basis: 100%;
+    }
+
+    .category {
+        font-size: 16px;
+    }
+
+    .top-buttons {
+        right: 12px;
+        top: 12px;
+    }
+
+    .app {
+        --icon-size: 18px;
+    }
+}
