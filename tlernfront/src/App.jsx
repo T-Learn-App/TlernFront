@@ -6,10 +6,8 @@ import settingsIcon from './assets/settings.svg'
 
 const API_URL = "https://b753f001-28d3-4584-916d-1b3b8654dd6a.mock.pstmn.io/api/words"
 
-
 function App() {
-
-    const [currentCard, setCurrentCard] = useState(null)
+    const [currentIndex, setCurrentIndex] = useState(0)
     const [showAnswer, setShowAnswer] = useState(false)
 
     const [isDark, setIsDark] = useState(false)
@@ -34,8 +32,8 @@ function App() {
             }
         }
 
-        document.addEventListener("mousedown", handleClick)
-        return () => document.removeEventListener("mousedown", handleClick)
+        document.addEventListener('mousedown', handleClick)
+        return () => document.removeEventListener('mousedown', handleClick)
     }, [])
 
     // ----- ФУНКЦИЯ ЗАГРУЗКИ СЛОВА ----- 
@@ -57,68 +55,87 @@ function App() {
 
     // ----- ПЕРЕКЛЮЧЕНИЕ КАРТОЧКИ -----
     const changeCard = () => {
-        setFlipState("flip-start")
+        setFlipState('flip-start')
 
         setTimeout(() => {
             loadWord()
             setShowAnswer(false)
-
             setFlipState("flip-end")
-            setTimeout(() => setFlipState("none"), 250)
-        }, 250)
+
+            setTimeout(() => setFlipState('none'), 300)
+        }, 300)
     }
 
     if (!currentCard) return <div>Загрузка...</div>
 
     return (
-        <div className={`app ${isDark ? 'dark' : ''}`}>
+        <div className={`app ${isDark ? 'dark' : ''} device-${device}`}>
             <div className="container">
 
                 <div className="category">
                     Категория: {currentCard.categoryName}
                 </div>
 
-                {/* СПРАВЫЕ КНОПКИ */}
-                <div className="top-buttons">
-
-                    {/* Статистика */}
-                    <div ref={statsRef} style={{ position: "relative" }}>
-                        <button
-                            className="icon-btn"
-                            onClick={() => setIsStatsOpen((p) => !p)}
-                        >
-                            <img src={statsIcon} className="icon-img" alt="stats" />
-                        </button>
-
-                        {isStatsOpen && (
-                            <div className="dropdown-stats">Будет позже</div>
-                        )}
+                {/* ВЕРХНИЙ РЯД: категория + иконки */}
+                <div className="top-row">
+                    <div className="category">
+                        Простые слова
                     </div>
 
-                    {/* Настройки */}
-                    <div ref={settingsRef} style={{ position: "relative" }}>
-                        <button
-                            className="icon-btn"
-                            onClick={() => setIsSettingsOpen((p) => !p)}
-                        >
-                            <img src={settingsIcon} className="icon-img" alt="settings" />
-                        </button>
+                    <div className="top-buttons">
+                        {/* Статистика */}
+                        <div ref={statsRef}>
+                            <button
+                                className="icon-btn"
+                                onClick={() => setIsStatsOpen(p => !p)}
+                            >
+                                <img src={statsIcon} className="icon-img" alt="stats" />
+                            </button>
 
-                        {isSettingsOpen && (
-                            <div className="dropdown-settings">
-                                <div className="dropdown-item">
-                                    <span>Тёмная тема</span>
-                                    <label className="switch">
-                                        <input
-                                            type="checkbox"
-                                            checked={isDark}
-                                            onChange={() => setIsDark((p) => !p)}
-                                        />
-                                        <span className="slider"></span>
-                                    </label>
+                            {isStatsOpen && (
+                                <div className="dropdown-stats">
+                                    Будет позже
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
+
+                        {/* Настройки */}
+                        <div ref={settingsRef}>
+                            <button
+                                className="icon-btn"
+                                onClick={() => setIsSettingsOpen(p => !p)}
+                            >
+                                <img src={settingsIcon} className="icon-img" alt="settings" />
+                            </button>
+
+                            {isSettingsOpen && (
+                                <div className="dropdown-settings">
+                                    <div className="dropdown-item">
+                                        <span>Тёмная тема</span>
+                                        <label className="switch">
+                                            <input
+                                                type="checkbox"
+                                                checked={isDark}
+                                                onChange={() => setIsDark(p => !p)}
+                                            />
+                                            <span className="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Выход */}
+                        <div>
+                            <button
+                                className="icon-btn"
+                                onClick={() => { if (typeof onLogout === 'function') onLogout() }}
+                                title="Выйти"
+                                aria-label="Выйти"
+                            >
+                                <img src={exitIcon} className="icon-img" alt="exit" />
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -144,7 +161,7 @@ function App() {
                                 className="show-btn"
                                 onClick={() => setShowAnswer(true)}
                             >
-                                <span className="show-icon">👁</span>
+                                <span className="show-icon" />
                                 <span>Показать</span>
                             </button>
                         ) : (
@@ -158,7 +175,7 @@ function App() {
                 {/* КНОПКИ ВНИЗУ */}
                 <div className="bottom-buttons">
                     <button className="yes-btn" onClick={changeCard}>
-                        Я знаю это слово
+                        Я уже знаю это слово
                     </button>
                     <button className="no-btn" onClick={changeCard}>
                         Я не знаю это слово
