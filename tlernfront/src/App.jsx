@@ -3,6 +3,7 @@ import './App.css'
 
 import statsIcon from './assets/statistics.svg'
 import settingsIcon from './assets/settings.svg'
+import exitIcon from './assets/exit.svg'
 
 const API_URL = "https://b753f001-28d3-4584-916d-1b3b8654dd6a.mock.pstmn.io/api/words" 
 
@@ -145,7 +146,7 @@ function App({ onLogout } = {}) {
                                     title="Выйти"
                                     aria-label="Выйти"
                                 >
-                                    Выйти
+                                    <img src={exitIcon} className="icon-img" alt="exit" />
                                 </button>
                             </div>
                         )}
