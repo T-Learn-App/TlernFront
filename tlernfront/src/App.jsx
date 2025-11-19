@@ -4,9 +4,9 @@ import './App.css'
 import statsIcon from './assets/statistics.svg'
 import settingsIcon from './assets/settings.svg'
 
-const API_URL = "https://b753f001-28d3-4584-916d-1b3b8654dd6a.mock.pstmn.io/api/words"
+const API_URL = "https://b753f001-28d3-4584-916d-1b3b8654dd6a.mock.pstmn.io/api/words" 
 
-function App() {
+function App({ onLogout } = {}) {
     const [currentIndex, setCurrentIndex] = useState(0)
     const [showAnswer, setShowAnswer] = useState(false)
 
@@ -16,8 +16,20 @@ function App() {
 
     const [flipState, setFlipState] = useState("none")
 
+    // добавлены состояния/переменные, которых не хватало
+    const [currentCard, setCurrentCard] = useState(null)
+    const [device, setDevice] = useState('desktop')
+
     const settingsRef = useRef(null)
     const statsRef = useRef(null)
+
+    // определение device по ширине окна
+    useEffect(() => {
+        const updateDevice = () => setDevice(window.innerWidth < 600 ? 'mobile' : 'desktop')
+        updateDevice()
+        window.addEventListener('resize', updateDevice)
+        return () => window.removeEventListener('resize', updateDevice)
+    }, [])
 
     // ----- ЗАГРУЗКА 1-го СЛОВА ПРИ ЗАПУСКЕ -----
     useEffect(() => {
@@ -39,7 +51,10 @@ function App() {
     // ----- ФУНКЦИЯ ЗАГРУЗКИ СЛОВА ----- 
     const loadWord = () => {
         fetch(API_URL)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                return res.json()
+            })
             .then(data => {
                 setCurrentCard({
                     word: data.word,
@@ -71,10 +86,6 @@ function App() {
     return (
         <div className={`app ${isDark ? 'dark' : ''} device-${device}`}>
             <div className="container">
-
-                <div className="category">
-                    Категория: {currentCard.categoryName}
-                </div>
 
                 {/* ВЕРХНИЙ РЯД: категория + иконки */}
                 <div className="top-row">
@@ -125,17 +136,19 @@ function App() {
                             )}
                         </div>
 
-                        {/* Выход */}
-                        <div>
-                            <button
-                                className="icon-btn"
-                                onClick={() => { if (typeof onLogout === 'function') onLogout() }}
-                                title="Выйти"
-                                aria-label="Выйти"
-                            >
-                                <img src={exitIcon} className="icon-img" alt="exit" />
-                            </button>
-                        </div>
+                        {/* Выход (рендерится только если передан обработчик) */}
+                        {typeof onLogout === 'function' && (
+                            <div>
+                                <button
+                                    className="icon-btn"
+                                    onClick={() => onLogout()}
+                                    title="Выйти"
+                                    aria-label="Выйти"
+                                >
+                                    Выйти
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
 
