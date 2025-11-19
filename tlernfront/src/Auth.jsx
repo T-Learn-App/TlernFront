@@ -47,7 +47,17 @@ export default function Auth({ onLogin }) {
                         title="Войти"
                         aria-label="Войти"
                     >
-                        ➜
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            viewBox="3 3 16 16"
+                            fill="currentColor"
+                            aria-hidden="true"
+                            focusable="false"
+                        >
+                            <path fill="#000000" d="M10.707 6.293a1 1 0 0 0-1.414 1.414L13.586 12l-4.293 4.293a1 1 0 1 0 1.414 1.414L15 13.414a2 2 0 0 0 0-2.828l-4.293-4.293Z" />
+                        </svg>
                     </button>
                 </form>
 
