@@ -24,7 +24,7 @@ export default function Auth({ onLogin }) {
     return (
         <div className="app">
             <div className="auth-card" role="region" aria-labelledby="auth-title">
-                <h1 id="auth-title" className="auth-title">Вход в T-Lern</h1>
+                <h1 id="auth-title" className="auth-title">Вход в T-Learn</h1>
 
                 <form className="auth-form" onSubmit={handleSubmit} noValidate>
                     <label htmlFor="userId" className="visually-hidden"></label>

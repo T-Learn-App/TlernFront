@@ -1,5 +1,6 @@
 ﻿import { useState, useEffect, useRef } from 'react'
 import './App.css'
+import useDevice from './hooks/useDevice'
 
 import statsIcon from './assets/statistics.svg'
 import settingsIcon from './assets/settings.svg'
@@ -23,6 +24,8 @@ const cards = [
 ]
 
 function App({ userId, onLogout }) {
+    const device = useDevice()
+
     const [currentIndex, setCurrentIndex] = useState(0)
     const [showAnswer, setShowAnswer] = useState(false)
 
@@ -30,7 +33,7 @@ function App({ userId, onLogout }) {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false)
     const [isStatsOpen, setIsStatsOpen] = useState(false)
 
-    const [flipState, setFlipState] = useState("none")
+    const [flipState, setFlipState] = useState('none')
 
     const settingsRef = useRef(null)
     const statsRef = useRef(null)
@@ -48,85 +51,88 @@ function App({ userId, onLogout }) {
             }
         }
 
-        document.addEventListener("mousedown", handleClick)
-        return () => document.removeEventListener("mousedown", handleClick)
+        document.addEventListener('mousedown', handleClick)
+        return () => document.removeEventListener('mousedown', handleClick)
     }, [])
 
     const changeCard = () => {
-        setFlipState("flip-start")
+        setFlipState('flip-start')
 
         setTimeout(() => {
             const next = (currentIndex + 1) % total
             setCurrentIndex(next)
             setShowAnswer(false)
-            setFlipState("flip-end")
+            setFlipState('flip-end')
 
-            setTimeout(() => setFlipState("none"), 300)
+            setTimeout(() => setFlipState('none'), 300)
         }, 300)
     }
 
     return (
-        <div className={`app ${isDark ? 'dark' : ''}`}>
+        <div className={`app ${isDark ? 'dark' : ''} device-${device}`}>
             <div className="container">
-                <div className="category">Категория: Простые слова</div>
 
-                {/* КНОПКИ СПРАВА */}
-                <div className="top-buttons">
-
-                    {/* Статистика */}
-                    <div ref={statsRef} style={{ position: "relative" }}>
-                        <button
-                            className="icon-btn"
-                            onClick={() => setIsStatsOpen((p) => !p)}
-                        >
-                            <img src={statsIcon} className="icon-img" alt="stats" />
-                        </button>
-
-                        {isStatsOpen && (
-                            <div className="dropdown-stats">
-                                Будет позже
-                            </div>
-                        )}
+                {/* ВЕРХНИЙ РЯД: категория + иконки */}
+                <div className="top-row">
+                    <div className="category">
+                        Простые слова
                     </div>
 
-                    {/* Настройки */}
-                    <div ref={settingsRef} style={{ position: "relative" }}>
-                        <button
-                            className="icon-btn"
-                            onClick={() => setIsSettingsOpen((p) => !p)}
-                        >
-                            <img src={settingsIcon} className="icon-img" alt="settings" />
-                        </button>
+                    <div className="top-buttons">
+                        {/* Статистика */}
+                        <div ref={statsRef}>
+                            <button
+                                className="icon-btn"
+                                onClick={() => setIsStatsOpen(p => !p)}
+                            >
+                                <img src={statsIcon} className="icon-img" alt="stats" />
+                            </button>
 
-                        {isSettingsOpen && (
-                            <div className="dropdown-settings">
-                                <div className="dropdown-item">
-                                    <span>Тёмная тема</span>
-                                    <label className="switch">
-                                        <input
-                                            type="checkbox"
-                                            checked={isDark}
-                                            onChange={() => setIsDark((p) => !p)}
-                                        />
-                                        <span className="slider"></span>
-                                    </label>
+                            {isStatsOpen && (
+                                <div className="dropdown-stats">
+                                    Будет позже
                                 </div>
-                            </div>
-                        )}
-                    </div>
+                            )}
+                        </div>
 
-                    {/* Выход (иконка как у настроек) */}
-                    <div style={{ position: "relative" }}>
-                        <button
-                            className="icon-btn"
-                            onClick={() => { if (typeof onLogout === 'function') onLogout() }}
-                            title="Выйти"
-                            aria-label="Выйти"
-                        >
-                            <img src={exitIcon} className="icon-img" alt="exit" />
-                        </button>
-                    </div>
+                        {/* Настройки */}
+                        <div ref={settingsRef}>
+                            <button
+                                className="icon-btn"
+                                onClick={() => setIsSettingsOpen(p => !p)}
+                            >
+                                <img src={settingsIcon} className="icon-img" alt="settings" />
+                            </button>
 
+                            {isSettingsOpen && (
+                                <div className="dropdown-settings">
+                                    <div className="dropdown-item">
+                                        <span>Тёмная тема</span>
+                                        <label className="switch">
+                                            <input
+                                                type="checkbox"
+                                                checked={isDark}
+                                                onChange={() => setIsDark(p => !p)}
+                                            />
+                                            <span className="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Выход */}
+                        <div>
+                            <button
+                                className="icon-btn"
+                                onClick={() => { if (typeof onLogout === 'function') onLogout() }}
+                                title="Выйти"
+                                aria-label="Выйти"
+                            >
+                                <img src={exitIcon} className="icon-img" alt="exit" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 {/* КАРТОЧКА */}
@@ -151,7 +157,7 @@ function App({ userId, onLogout }) {
                                 className="show-btn"
                                 onClick={() => setShowAnswer(true)}
                             >
-                                <span className="show-icon">👁</span>
+                                <span className="show-icon" />
                                 <span>Показать</span>
                             </button>
                         ) : (
