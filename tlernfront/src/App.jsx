@@ -4,25 +4,12 @@ import './App.css'
 import statsIcon from './assets/statistics.svg'
 import settingsIcon from './assets/settings.svg'
 
-const cards = [
-    {
-        word: 'Card',
-        transcription: '[kaːrd]',
-        pos: 'Noun',
-        isNew: true,
-        translation: 'карта; открытка'
-    },
-    {
-        word: 'Table',
-        transcription: '[ˈteɪbəl]',
-        pos: 'Noun',
-        isNew: false,
-        translation: 'стол; таблица'
-    }
-]
+const API_URL = "https://b753f001-28d3-4584-916d-1b3b8654dd6a.mock.pstmn.io/api/words"
+
 
 function App() {
-    const [currentIndex, setCurrentIndex] = useState(0)
+
+    const [currentCard, setCurrentCard] = useState(null)
     const [showAnswer, setShowAnswer] = useState(false)
 
     const [isDark, setIsDark] = useState(false)
@@ -34,10 +21,10 @@ function App() {
     const settingsRef = useRef(null)
     const statsRef = useRef(null)
 
-    const total = cards.length
-    const currentCard = cards[currentIndex]
-
+    // ----- ЗАГРУЗКА 1-го СЛОВА ПРИ ЗАПУСКЕ -----
     useEffect(() => {
+        loadWord()
+
         const handleClick = (e) => {
             if (settingsRef.current && !settingsRef.current.contains(e.target)) {
                 setIsSettingsOpen(false)
@@ -51,25 +38,47 @@ function App() {
         return () => document.removeEventListener("mousedown", handleClick)
     }, [])
 
+    // ----- ФУНКЦИЯ ЗАГРУЗКИ СЛОВА ----- 
+    const loadWord = () => {
+        fetch(API_URL)
+            .then(res => res.json())
+            .then(data => {
+                setCurrentCard({
+                    word: data.word,
+                    transcription: data.transcription,
+                    pos: data.partOfSpeech,
+                    translation: data.translation,
+                    categoryName: data.categoryName,
+                    isNew: true
+                })
+            })
+            .catch(err => console.error("Ошибка загрузки:", err))
+    }
+
+    // ----- ПЕРЕКЛЮЧЕНИЕ КАРТОЧКИ -----
     const changeCard = () => {
         setFlipState("flip-start")
 
         setTimeout(() => {
-            const next = (currentIndex + 1) % total
-            setCurrentIndex(next)
+            loadWord()
             setShowAnswer(false)
-            setFlipState("flip-end")
 
-            setTimeout(() => setFlipState("none"), 300)
-        }, 300)
+            setFlipState("flip-end")
+            setTimeout(() => setFlipState("none"), 250)
+        }, 250)
     }
+
+    if (!currentCard) return <div>Загрузка...</div>
 
     return (
         <div className={`app ${isDark ? 'dark' : ''}`}>
             <div className="container">
-                <div className="category">Категория: Простые слова</div>
 
-                {/* КНОПКИ СПРАВА */}
+                <div className="category">
+                    Категория: {currentCard.categoryName}
+                </div>
+
+                {/* СПРАВЫЕ КНОПКИ */}
                 <div className="top-buttons">
 
                     {/* Статистика */}
@@ -82,9 +91,7 @@ function App() {
                         </button>
 
                         {isStatsOpen && (
-                            <div className="dropdown-stats">
-                                Будет позже
-                            </div>
+                            <div className="dropdown-stats">Будет позже</div>
                         )}
                     </div>
 
@@ -141,18 +148,17 @@ function App() {
                                 <span>Показать</span>
                             </button>
                         ) : (
-                            <div className="answer">{currentCard.translation}</div>
+                            <div className="answer">
+                                {currentCard.translation}
+                            </div>
                         )}
-                    </div>
-
-                    <div className="pagination">
-                        {currentIndex + 1} / {total}
                     </div>
                 </div>
 
+                {/* КНОПКИ ВНИЗУ */}
                 <div className="bottom-buttons">
                     <button className="yes-btn" onClick={changeCard}>
-                        Я уже знаю это слово
+                        Я знаю это слово
                     </button>
                     <button className="no-btn" onClick={changeCard}>
                         Я не знаю это слово
