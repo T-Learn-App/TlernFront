@@ -3,6 +3,7 @@ import './App.css'
 
 import statsIcon from './assets/statistics.svg'
 import settingsIcon from './assets/settings.svg'
+import exitIcon from './assets/exit.svg'
 
 const cards = [
     {
@@ -21,7 +22,7 @@ const cards = [
     }
 ]
 
-function App() {
+function App({ userId, onLogout }) {
     const [currentIndex, setCurrentIndex] = useState(0)
     const [showAnswer, setShowAnswer] = useState(false)
 
@@ -113,6 +114,19 @@ function App() {
                             </div>
                         )}
                     </div>
+
+                    {/* Выход (иконка как у настроек) */}
+                    <div style={{ position: "relative" }}>
+                        <button
+                            className="icon-btn"
+                            onClick={() => { if (typeof onLogout === 'function') onLogout() }}
+                            title="Выйти"
+                            aria-label="Выйти"
+                        >
+                            <img src={exitIcon} className="icon-img" alt="exit" />
+                        </button>
+                    </div>
+
                 </div>
 
                 {/* КАРТОЧКА */}

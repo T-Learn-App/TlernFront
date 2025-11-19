@@ -384,6 +384,66 @@ input:checked + .slider {
         background: #111827;
         color: #fff;
     }
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f7f8fa;
+}
+
+.auth-card {
+    background: white;
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 5px 5px 20px #334155;
+    text-align: center;
+    width: 420px;
+}
+
+.auth-title {
+    margin: 0 0 30px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #111111;
+}
+
+.auth-form {
+    display: flex;
+    gap: 10px;
+}
+
+.auth-input {
+    flex: 1;
+    padding: 16px 18px;
+    border-radius: 12px;
+    border: 1px solid #7c7c7c;
+    background: #f1f3f7;
+    font-size: 16px;
+    outline: none;
+    transition: all .2s;
+    color: black;
+}
+
+    .auth-input:focus {
+        border-color: #b7b7b7;
+        background: #fff;
+    }
+
+.auth-btn {
+    padding: 0 20px;
+    background: #ffd600;
+    border: none;
+    border-radius: 12px;
+    font-size: 22px;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+    .auth-btn:hover {
+        background: #ffcd00;
+    }
+
 
 /* ----------------------------------------------------
    ¿ƒ¿œ“»¬
