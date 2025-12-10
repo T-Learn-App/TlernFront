@@ -1,5 +1,5 @@
 /* ----------------------------------------------------
-   БАЗОВЫЕ СТИЛИ
+   пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 ---------------------------------------------------- */
 .app {
     height: 100vh;
@@ -29,7 +29,7 @@
 }
 
 /* ----------------------------------------------------
-   ВЕРХНИЙ РЯД: категория + иконки  (NEW)
+   пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ + пїЅпїЅпїЅпїЅпїЅпїЅ  (NEW)
 ---------------------------------------------------- */
 .top-row {
     display: flex;
@@ -40,7 +40,7 @@
 }
 
 /* ----------------------------------------------------
-   КАТЕГОРИЯ
+   пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 ---------------------------------------------------- */
 .category {
     background: #ffdf39;
@@ -54,11 +54,17 @@
 }
 
 /* ----------------------------------------------------
-   КНОПКИ ВВЕРХУ
+   пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 ---------------------------------------------------- */
 .top-buttons {
     display: flex;
     gap: 10px;
+    position: relative;
+}
+
+.dropdown-wrapper {
+    position: relative;
+    display: inline-flex;
 }
 
 .icon-btn {
@@ -89,7 +95,7 @@
 }
 
 /* ----------------------------------------------------
-   ОСНОВНАЯ КАРТОЧКА
+   пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 ---------------------------------------------------- */
 .card {
     background: #ffffff;
@@ -106,7 +112,7 @@
 }
 
 /* ----------------------------------------------------
-   FLIP АНИМАЦИЯ
+   FLIP пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 ---------------------------------------------------- */
 .flip-none {
     transform: rotateY(0deg);
@@ -123,7 +129,7 @@
 }
 
 /* ----------------------------------------------------
-   КОНТЕНТ КАРТОЧКИ
+   пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 ---------------------------------------------------- */
 .card-header {
     display: flex;
@@ -209,7 +215,7 @@
 }
 
 /* ----------------------------------------------------
-   КНОПКИ СНИЗУ
+   пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 ---------------------------------------------------- */
 .bottom-buttons {
     margin-top: 40px;
@@ -252,11 +258,11 @@
     }
 
 /* ----------------------------------------------------
-   ВЫПАДАЮЩЕЕ МЕНЮ (настройки)
+   пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
 ---------------------------------------------------- */
 .dropdown-settings {
     position: absolute;
-    top: 55px;
+    top: calc(100% + 8px);
     right: 0;
     background: #ffffff;
     border-radius: 12px;
@@ -277,25 +283,25 @@
 }
 
 /* ----------------------------------------------------
-   ВЫПАДАЮЩЕЕ МЕНЮ (статистика)
+   пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
 ---------------------------------------------------- */
 .dropdown-stats {
     position: absolute;
-    top: 55px;
+    top: calc(100% + 8px);
     right: 0;
     background: #ffffff;
     border-radius: 12px;
-    padding: 12px 16px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    padding: 16px 18px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
     z-index: 1000;
-    width: 160px;
+    width: 340px;
     font-size: 16px;
     color: #111;
     transition: background 0.35s ease, color 0.35s ease;
 }
 
 /* ----------------------------------------------------
-   SWITCH (тёмная тема)
+   SWITCH (пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ)
 ---------------------------------------------------- */
 .switch {
     position: relative;
@@ -343,7 +349,7 @@ input:checked + .slider {
     }
 
 /* ----------------------------------------------------
-   ТЕМНАЯ ТЕМА
+   пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 ---------------------------------------------------- */
 .app.dark {
     background: #0f172a;
@@ -363,6 +369,10 @@ input:checked + .slider {
     .app.dark .dropdown-settings,
     .app.dark .dropdown-stats {
         background: #1f2937;
+        color: #f8fafc;
+    }
+
+    .app.dark .dropdown-settings .dropdown-item span {
         color: #f8fafc;
     }
 
@@ -387,8 +397,32 @@ input:checked + .slider {
         color: #fff;
     }
 
+    .app.dark .auth-btn,
+    .app.dark .auth-tab.active,
+    .app.dark .stats-total {
+        background: #facc15;
+        color: #111;
+    }
+
+    .app.dark .auth-tab {
+        background: transparent;
+        color: #e2e8f0;
+    }
+
+    .app.dark .stats-box {
+        color: #e2e8f0;
+    }
+
+    .app.dark .stats-header {
+        color: #e2e8f0;
+    }
+
+    .app.dark .stats-bar-label {
+        color: #cbd5e1;
+    }
+
 /* ----------------------------------------------------
-   АВТОРИЗАЦИЯ
+   пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 ---------------------------------------------------- */
 .auth-wrapper {
     display: flex;
@@ -405,6 +439,9 @@ input:checked + .slider {
     box-shadow: 1px 2px 10px #ffd600;
     text-align: center;
     width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .auth-title {
@@ -414,9 +451,16 @@ input:checked + .slider {
     color: #111111;
 }
 
-.auth-form {
-    display: flex;
-    gap: 10px;
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 .auth-input {
@@ -458,12 +502,133 @@ input:checked + .slider {
         transform: scale(0.93);
     }
 
-/* ----------------------------------------------------
-   АДАПТИВ ПО ШИРИНЕ
----------------------------------------------------- */
+.auth-tabs {
+    display: flex;
+    gap: 8px;
+    background: #f1f3f7;
+    padding: 4px;
+    border-radius: 12px;
+}
+
+.auth-tab {
+    flex: 1;
+    border: none;
+    background: transparent;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.auth-tab.active {
+    background: #ffd600;
+    color: #111;
+}
+
+.auth-form-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+    width: 100%;
+}
+
+.auth-input.full {
+    width: 100%;
+}
+
+.auth-input {
+    width: 100%;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+}
+
+.auth-btn.wide {
+    width: 100%;
+    height: auto;
+    padding: 14px 16px;
+    font-weight: 700;
+    font-size: 17px;
+}
+
+.auth-helper {
+    font-size: 13px;
+    color: #555;
+}
+
+.auth-error {
+    color: #c53030;
+    margin-top: 8px;
+}
+
+.stats-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.stats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.stats-total {
+    background: #ffd600;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.stats-chart {
+    display: flex;
+    align-items: stretch;
+    height: 200px;
+    padding: 8px 4px 0 4px;
+    box-sizing: border-box;
+}
+
+.stats-bar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.stats-bar-fill {
+    width: 100%;
+    border-radius: 6px 6px 2px 2px;
+    background: linear-gradient(180deg, #ffd600, #e9c92a);
+    transition: height 0.25s ease;
+    min-height: 6px;
+}
+
+.stats-bar-label {
+    font-size: 11px;
+    color: #555;
+}
+
+
+
 @media (max-width: 600px) {
     .container {
         padding: 20px 16px;
+    }
+
+    .dropdown-stats {
+        width: min(100vw - 24px, 480px);
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+    }
+
+    .stats-chart {
+        height: 220px;
     }
 
     .top-row {
@@ -502,12 +667,12 @@ input:checked + .slider {
 }
 
 /* ----------------------------------------------------
-  АДАПТАЦИЯ (ТОЛЬКО device-mobile)
+  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅ device-mobile)
 ---------------------------------------------------- */
 
 
 .app.device-mobile {
-    /* базовая мобильная раскладка */
+    /* пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
     height: 100vh;
     width: 100vw;
     padding: 0;
@@ -519,7 +684,7 @@ input:checked + .slider {
     background-position: center;
 }
 
-/* контейнер — прокручиваемая область внутри app */
+/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ app */
 .app.device-mobile .container {
     max-width: 95%;
     padding: 18px;
@@ -532,7 +697,7 @@ input:checked + .slider {
     -webkit-overflow-scrolling: touch;
 }
 
-/* верхняя строка — компактнее и прижата к верху */
+/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ */
 .app.device-mobile .top-row {
     flex-direction: row;
     align-items: center;
@@ -542,7 +707,7 @@ input:checked + .slider {
     padding-top: env(safe-area-inset-top, 8px);
 }
 
-/* категория — сокращённый вид с обрезкой текста */
+/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ */
 .app.device-mobile .category {
     padding: 8px 12px;
     border-radius: 10px;
@@ -550,11 +715,11 @@ input:checked + .slider {
     max-width: 70%;
 }
 
-/* кнопки вверху — компактные и легко нажимаемые */
+/* пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 .app.device-mobile .top-buttons {
     gap: 6px;
     align-self: flex-end;
-    align-items:end:
+        align-items: flex-end;
 }
 
 .app.device-mobile .icon-btn {
@@ -564,7 +729,7 @@ input:checked + .slider {
     border-radius: 10px;
 }
 
-/* карточка — оптимизирована под экран телефона */
+/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 .app.device-mobile .card {
     padding: 20px;
     max-height: 50%;
@@ -576,14 +741,14 @@ input:checked + .slider {
     flex: 1 0 auto;
 }
 
-/* заголовок карточки — вертикальная компоновка */
+/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 .app.device-mobile .card-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
 }
 
-/* главное слово и пояснения — уменьшены для читаемости */
+/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 .app.device-mobile .word {
     font-size: 34px;
     line-height: 1.05;
@@ -594,7 +759,7 @@ input:checked + .slider {
     font-size: 15px;
 }
 
-/* точка и метка нового слова — немного уменьшены */
+/* пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 .app.device-mobile .new-word-dot {
     width: 9px;
     height: 9px;
@@ -605,7 +770,7 @@ input:checked + .slider {
     margin-top: 8px;
 }
 
-/* блок показа/ответа — крупные тап-зоны */
+/* пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅ */
 .app.device-mobile .show-area {
     margin-top: 18px;
     text-align: center;
@@ -622,13 +787,13 @@ input:checked + .slider {
     padding: 10px 18px;
 }
 
-/* пагинация — чуть меньше и с отступом */
+/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 .app.device-mobile .pagination {
     margin-top: 14px;
     font-size: 16px;
 }
 
-/* нижние кнопки — фиксированы/прижаты к низу с учётом safe-area */
+/* пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ safe-area */
 .app.device-mobile .bottom-buttons {
     position: sticky;
     bottom: 0;
@@ -640,7 +805,7 @@ input:checked + .slider {
     justify-content: space-between;
 }
 
-/* кнопки Да/Нет — большие и удобные для тапа */
+/* пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ/пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ */
 .app.device-mobile .yes-btn,
 .app.device-mobile .no-btn {
     flex: 1 1 48%;
@@ -649,7 +814,7 @@ input:checked + .slider {
     border-radius: 12px;
 }
 
-/* выпадающие меню — адаптированы по ширине экрана */
+/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ */
 .app.device-mobile .dropdown-settings,
 .app.device-mobile .dropdown-stats {
     right: 12px;
@@ -659,19 +824,19 @@ input:checked + .slider {
     max-width: calc(100% - 24px);
 }
 
-/* форма авторизации — адаптивная для мобильных */
+/* пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 .app.device-mobile .auth-card {
     width: calc(100% - 36px);
     padding: 22px;
 }
 
-/* переключатель/иконки — чуть крупнее для тапа */
+/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ */
 .app.device-mobile .icon-img {
     width: var(--icon-size);
     height: var(--icon-size);
 }
 
-/* мелкие улучшения для сенсорных устройств */
+/* пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 .app.device-mobile button,
 .app.device-mobile .icon-btn,
 .app.device-mobile .auth-btn {

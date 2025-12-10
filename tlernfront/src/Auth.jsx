@@ -1,68 +1,133 @@
-﻿import { useState } from "react"
+﻿import { useMemo, useState } from "react"
 import "./App.css"
+import { login, register } from "./services/auth"
 
-export default function Auth({ onLogin }) {
-    const [userId, setUserId] = useState("")
+
+export default function Auth({ onAuth }) {
+    const [mode, setMode] = useState("login")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [confirm, setConfirm] = useState("")
     const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
 
-    const handleSubmit = (e) => {
+    const title = useMemo(() => mode === "login" ? "Вход" : "Регистрация", [mode])
+
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        const id = userId.trim()
-        if (!id) {
-            setError("Введите Почту")
+        setError("")
+
+        if (!email.trim()) {
+            setError("Введите email")
             return
         }
-        setError("")
-        if (typeof onLogin === "function") {
-            onLogin(id)
-        } else {
-            // Для разработки: просто логируем, если колбек не передан
-            console.log("Logged in as", id)
+        if (!password.trim()) {
+            setError("Введите пароль")
+            return
+        }
+        if (mode === "register" && password !== confirm) {
+            setError("Пароли не совпадают")
+            return
+        }
+
+        setLoading(true)
+        try {
+            const authData = mode === "login"
+                ? await login(email.trim(), password.trim())
+                : await register(email.trim(), password.trim())
+
+            if (typeof onAuth === "function") {
+                onAuth(authData)
+            }
+        } catch (err) {
+            setError(err?.message || "Не удалось выполнить действие")
+        } finally {
+            setLoading(false)
         }
     }
 
     return (
-        <div className="app">
+        <div className="app auth-wrapper">
             <div className="auth-card" role="region" aria-labelledby="auth-title">
-                <h1 id="auth-title" className="auth-title">Вход в T-Learn</h1>
+                <h1 id="auth-title" className="auth-title">T-Learn — {title}</h1>
 
-                <form className="auth-form" onSubmit={handleSubmit} noValidate>
-                    <label htmlFor="userId" className="visually-hidden"></label>
+                <div className="auth-tabs" role="tablist" aria-label="Режим авторизации">
+                    <button
+                        type="button"
+                        role="tab"
+                        aria-selected={mode === "login"}
+                        className={`auth-tab ${mode === "login" ? "active" : ""}`}
+                        onClick={() => setMode("login")}
+                    >
+                        Вход
+                    </button>
+                    <button
+                        type="button"
+                        role="tab"
+                        aria-selected={mode === "register"}
+                        className={`auth-tab ${mode === "register" ? "active" : ""}`}
+                        onClick={() => setMode("register")}
+                    >
+                        Регистрация
+                    </button>
+                </div>
+
+                <form className="auth-form-column" onSubmit={handleSubmit} noValidate>
+                    <label htmlFor="email" className="visually-hidden">Email</label>
                     <input
-                        id="userId"
-                        name="userId"
-                        className="auth-input"
-                        type="text"
-                        placeholder="UserID"
-                        value={userId}
-                        onChange={(e) => setUserId(e.target.value)}
+                        id="email"
+                        name="email"
+                        className="auth-input full"
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         autoFocus
                         aria-invalid={!!error}
                         aria-describedby={error ? "auth-error" : undefined}
                     />
 
+                    <label htmlFor="password" className="visually-hidden">Пароль</label>
+                    <input
+                        id="password"
+                        name="password"
+                        className="auth-input full"
+                        type="password"
+                        placeholder="Пароль"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+
+                    {mode === "register" && (
+                        <>
+                            <label htmlFor="confirm" className="visually-hidden">Повторите пароль</label>
+                            <input
+                                id="confirm"
+                                name="confirm"
+                                className="auth-input full"
+                                type="password"
+                                placeholder="Повторите пароль"
+                                value={confirm}
+                                onChange={(e) => setConfirm(e.target.value)}
+                            />
+                        </>
+                    )}
+
                     <button
-                        className="auth-btn"
+                        className="auth-btn wide"
                         type="submit"
-                        title="Войти"
-                        aria-label="Войти"
+                        title={title}
+                        aria-label={title}
+                        disabled={loading}
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="18"
-                            height="18"
-                            viewBox="3 3 16 16"
-                            fill="currentColor"
-                            aria-hidden="true"
-                            focusable="false"
-                        >
-                            <path fill="#000000" d="M10.707 6.293a1 1 0 0 0-1.414 1.414L13.586 12l-4.293 4.293a1 1 0 1 0 1.414 1.414L15 13.414a2 2 0 0 0 0-2.828l-4.293-4.293Z" />
-                        </svg>
+                        {loading ? "..." : title}
                     </button>
                 </form>
 
+                
+
                 {error && (
-                    <div id="auth-error" style={{ color: "#c53030", marginTop: 12 }} role="alert" aria-live="assertive">
+                    <div id="auth-error" className="auth-error" role="alert" aria-live="assertive">
                         {error}
                     </div>
                 )}

@@ -4,10 +4,21 @@ import './App.css'
 import statsIcon from './assets/statistics.svg'
 import settingsIcon from './assets/settings.svg'
 import exitIcon from './assets/exit.svg'
+import { Bar } from 'react-chartjs-2'
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Tooltip,
+    Legend
+} from 'chart.js'
 
-const API_URL = "https://b753f001-28d3-4584-916d-1b3b8654dd6a.mock.pstmn.io/api/words" 
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
-function App({ onLogout } = {}) {
+const API_URL = "https://49bc691e-65d3-4b10-9f27-c7de532f01f6.mock.pstmn.io/api/words" 
+
+function App({ auth, onLogout } = {}) {
     const [currentIndex, setCurrentIndex] = useState(0)
     const [showAnswer, setShowAnswer] = useState(false)
 
@@ -17,12 +28,19 @@ function App({ onLogout } = {}) {
 
     const [flipState, setFlipState] = useState("none")
 
-    // добавлены состояния/переменные, которых не хватало
+    const [words, setWords] = useState([])
     const [currentCard, setCurrentCard] = useState(null)
     const [device, setDevice] = useState('desktop')
-
+    const [error, setError] = useState("")
+    const [stats, setStats] = useState({ total: 0, byDate: {} })
     const settingsRef = useRef(null)
     const statsRef = useRef(null)
+
+    const STATS_KEY = 'tlern_stats'
+    const getLocalDateKey = (date = new Date()) => {
+        const shifted = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+        return shifted.toISOString().slice(0, 10)
+    }
 
     // определение device по ширине окна
     useEffect(() => {
@@ -34,7 +52,8 @@ function App({ onLogout } = {}) {
 
     // ----- ЗАГРУЗКА 1-го СЛОВА ПРИ ЗАПУСКЕ -----
     useEffect(() => {
-        loadWord()
+        loadWords()
+        loadStats()
 
         const handleClick = (e) => {
             if (settingsRef.current && !settingsRef.current.contains(e.target)) {
@@ -50,31 +69,78 @@ function App({ onLogout } = {}) {
     }, [])
 
     // ----- ФУНКЦИЯ ЗАГРУЗКИ СЛОВА ----- 
-    const loadWord = () => {
+    const mapWord = (word) => ({
+        word: word.word,
+        transcription: word.transcription,
+        pos: word.partOfSpeech || word.pos,
+        translation: word.translation,
+        categoryName: word.category ?? word.categoryName,
+        isNew: true
+    })
+
+    const loadStats = () => {
+        try {
+            const saved = JSON.parse(localStorage.getItem(STATS_KEY) || '{}')
+            setStats({
+                total: saved.total || 0,
+                byDate: saved.byDate || {}
+            })
+        } catch {
+            setStats({ total: 0, byDate: {} })
+        }
+    }
+
+    const saveStats = (nextStats) => {
+        setStats(nextStats)
+        try {
+            localStorage.setItem(STATS_KEY, JSON.stringify(nextStats))
+        } catch {
+            // ignore storage errors
+        }
+    }
+
+    const addKnownWord = () => {
+        const key = getLocalDateKey()
+        const nextByDate = { ...stats.byDate, [key]: (stats.byDate[key] || 0) + 1 }
+        const nextStats = { total: stats.total + 1, byDate: nextByDate }
+        saveStats(nextStats)
+    }
+
+    const loadWords = () => {
+        setError("")
         fetch(API_URL)
             .then(res => {
                 if (!res.ok) throw new Error(`HTTP ${res.status}`)
                 return res.json()
             })
             .then(data => {
-                setCurrentCard({
-                    word: data.word,
-                    transcription: data.transcription,
-                    pos: data.partOfSpeech,
-                    translation: data.translation,
-                    categoryName: data.categoryName,
-                    isNew: true
-                })
+                const incoming = Array.isArray(data?.words) ? data.words : Array.isArray(data) ? data : []
+                if (!incoming.length) throw new Error("Список слов пуст")
+                const mapped = incoming.map(mapWord)
+                setWords(mapped)
+                setCurrentIndex(0)
+                setCurrentCard(mapped[0])
             })
-            .catch(err => console.error("Ошибка загрузки:", err))
+            .catch(err => {
+                console.error("Ошибка загрузки:", err)
+                setError("Не удалось загрузить слова. Проверьте API_URL или сеть.")
+                setCurrentCard(null)
+            })
     }
 
     // ----- ПЕРЕКЛЮЧЕНИЕ КАРТОЧКИ -----
     const changeCard = () => {
+        if (!words.length) {
+            loadWords()
+            return
+        }
+
+        const nextIndex = (currentIndex + 1) % words.length
         setFlipState('flip-start')
 
         setTimeout(() => {
-            loadWord()
+            setCurrentIndex(nextIndex)
+            setCurrentCard(words[nextIndex])
             setShowAnswer(false)
             setFlipState("flip-end")
 
@@ -82,7 +148,88 @@ function App({ onLogout } = {}) {
         }, 300)
     }
 
-    if (!currentCard) return <div>Загрузка...</div>
+    const handleKnown = () => {
+        addKnownWord()
+        changeCard()
+    }
+
+    const handleUnknown = () => {
+        changeCard()
+    }
+
+    const getLast7DaysStats = () => {
+        const result = []
+        const today = new Date()
+        for (let i = 6; i >= 0; i--) {
+            const d = new Date(today)
+            d.setDate(today.getDate() - i)
+            const key = getLocalDateKey(d)
+            result.push({
+                label: key.slice(5), // MM-DD
+                value: stats.byDate[key] || 0
+            })
+        }
+        return result
+    }
+
+    const renderStats = () => {
+        const data = getLast7DaysStats()
+        const chartData = {
+            labels: data.map(d => d.label),
+            datasets: [
+                {
+                    label: 'Изучено за день',
+                    data: data.map(d => d.value),
+                    backgroundColor: 'rgba(79, 70, 229, 0.8)',
+                    borderRadius: 6,
+                    borderSkipped: false
+                }
+            ]
+        }
+
+        const chartOptions = {
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => `${ctx.raw ?? 0} слов`
+                    }
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1 }
+                }
+            }
+        }
+
+        return (
+            <div className="stats-box">
+                <div className="stats-header">
+                    <div>Статистика (7 дней)</div>
+                    <div className="stats-total">Всего: {stats.total}</div>
+                </div>
+                <div className="stats-chart" aria-label="График изученных слов за 7 дней">
+                    <Bar data={chartData} options={chartOptions} />
+                </div>
+            </div>
+        )
+    }
+
+    if (!currentCard) return (
+        <div className="app">
+            <div className="container">
+                <div style={{ marginTop: 40, textAlign: "center" }}>
+                    <div>Загрузка...</div>
+                    {error && <div style={{ marginTop: 12, color: "#c53030" }}>{error}</div>}
+                    <button className="show-btn" style={{ marginTop: 12 }} onClick={loadWords}>Повторить запрос</button>
+                </div>
+            </div>
+        </div>
+    )
 
     return (
         <div className={`app ${isDark ? 'dark' : ''} device-${device}`}>
@@ -96,7 +243,7 @@ function App({ onLogout } = {}) {
 
                     <div className="top-buttons">
                         {/* Статистика */}
-                        <div ref={statsRef}>
+                        <div ref={statsRef} className="dropdown-wrapper">
                             <button
                                 className="icon-btn"
                                 onClick={() => setIsStatsOpen(p => !p)}
@@ -106,13 +253,13 @@ function App({ onLogout } = {}) {
 
                             {isStatsOpen && (
                                 <div className="dropdown-stats">
-                                    Будет позже
+                                    {renderStats()}
                                 </div>
                             )}
                         </div>
 
                         {/* Настройки */}
-                        <div ref={settingsRef}>
+                        <div ref={settingsRef} className="dropdown-wrapper">
                             <button
                                 className="icon-btn"
                                 onClick={() => setIsSettingsOpen(p => !p)}
@@ -188,10 +335,10 @@ function App({ onLogout } = {}) {
 
                 {/* КНОПКИ ВНИЗУ */}
                 <div className="bottom-buttons">
-                    <button className="yes-btn" onClick={changeCard}>
+                    <button className="yes-btn" onClick={handleKnown}>
                         Я уже знаю это слово
                     </button>
-                    <button className="no-btn" onClick={changeCard}>
+                    <button className="no-btn" onClick={handleUnknown}>
                         Я не знаю это слово
                     </button>
                 </div>
