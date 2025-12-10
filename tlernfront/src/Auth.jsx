@@ -49,7 +49,7 @@ export default function Auth({ onAuth }) {
     return (
         <div className="app auth-wrapper">
             <div className="auth-card" role="region" aria-labelledby="auth-title">
-                <h1 id="auth-title" className="auth-title">T-Learn — {title}</h1>
+                <h1 id="auth-title" className="auth-title">T-Learn</h1>
 
                 <div className="auth-tabs" role="tablist" aria-label="Режим авторизации">
                     <button

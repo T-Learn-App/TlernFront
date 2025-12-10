@@ -87,6 +87,15 @@
         transform: scale(0.92);
     }
 
+.app.dark .icon-btn {
+    background: #0b1220;
+    border: 1px solid #334155;
+}
+
+.app.dark .icon-img {
+    filter: invert(1);
+}
+
 .icon-img {
     width: var(--icon-size);
     height: var(--icon-size);
